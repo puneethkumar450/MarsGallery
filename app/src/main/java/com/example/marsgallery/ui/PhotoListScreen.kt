@@ -17,20 +17,18 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
-import kotlin.collections.lastIndex
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoListScreen(viewModel: PhotoViewModel) {
-    val uiState by viewModel.state.collectAsState()
+    val lUiState by viewModel.uiState.collectAsState()
 
     val listState = rememberLazyListState()
 
     // Infinite scroll trigger if you are near the end
-    LaunchedEffect(listState, uiState.photos.size) {
+    LaunchedEffect(listState, lUiState.photos.size) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .filterNotNull()
-            .map { lastIndex -> lastIndex >= uiState.photos.lastIndex - 3 }
+            .map { lastIndex -> lastIndex >= lUiState.photos.lastIndex - 3 }
             .distinctUntilChanged()
             .collectLatest { shouldLoadMore ->
                 if (shouldLoadMore) viewModel.loadMore()
@@ -40,14 +38,14 @@ fun PhotoListScreen(viewModel: PhotoViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("${uiState.selectedRover.label} Photos") }
+                title = { Text("${lUiState.selectedRover.label} Photos") }
             )
         },
         bottomBar = {
             NavigationBar {
                 RoverTab.entries.forEach { tab ->
                     NavigationBarItem(
-                        selected = uiState.selectedRover == tab,
+                        selected = lUiState.selectedRover == tab,
                         onClick = { viewModel.selectRover(tab) },
                         icon = { Icon(Icons.Default.Add, contentDescription = null) },
                         label = { Text(tab.label) }
@@ -57,14 +55,14 @@ fun PhotoListScreen(viewModel: PhotoViewModel) {
         }
     ) { padding ->
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = uiState.isRefreshing),
+            state = rememberSwipeRefreshState(isRefreshing = lUiState.isRefreshing),
             onRefresh = { viewModel.refresh() },
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
         ) {
             // Empty state
-            if (uiState.photos.isEmpty() && !uiState.isRefreshing && uiState.error == null) {
+            if (lUiState.photos.isEmpty() && !lUiState.isRefreshing && lUiState.error == null) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("No photos found.")
                 }
@@ -75,13 +73,12 @@ fun PhotoListScreen(viewModel: PhotoViewModel) {
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    itemsIndexed(uiState.photos, key = { _, item -> item }) { index, photo ->
+                    itemsIndexed(lUiState.photos, key = { _, item -> item }) { index, photo ->
                         PhotoCard(photo)
-                        // Optional: tiny spacer at the end of each item
-                        if (index == uiState.photos.lastIndex) Spacer(Modifier.height(8.dp))
+                        if (index == lUiState.photos.lastIndex) Spacer(Modifier.height(7.dp))
                     }
 
-                    if (uiState.isLoadingMore) {
+                    if (lUiState.isLoadingMore) {
                         item {
                             Box(
                                 modifier = Modifier
