@@ -3,7 +3,7 @@ package com.example.marsgallery.data
 import com.example.marsgallery.Constants
 import javax.inject.Inject
 
-class PhotoRepository @Inject constructor(
+open class PhotoRepository @Inject constructor(
     private val api: NasaApi
 ) {
     suspend fun getMarsPhotos(
