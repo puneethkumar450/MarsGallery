@@ -9,6 +9,6 @@ object Constants {
     const val DEFAULT_SOL = 1000
 
     // extension for logs
-    fun Any.LogD(msg: String) = Log.d("MarsGallery", msg)
-    fun Any.LogE(msg: String) = Log.e("MarsGallery", msg)
+    fun Any.LogD(msg: String) = println(msg)
+    fun Any.LogE(msg: String) = println(msg)
 }

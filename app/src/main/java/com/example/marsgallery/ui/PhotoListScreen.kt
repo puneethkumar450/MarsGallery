@@ -31,7 +31,7 @@ fun PhotoListScreen(viewModel: PhotoViewModel) {
             .map { lastIndex -> lastIndex >= lUiState.photos.lastIndex - 3 }
             .distinctUntilChanged()
             .collectLatest { shouldLoadMore ->
-                if (shouldLoadMore) viewModel.loadMore()
+                if (shouldLoadMore) viewModel.loadMoreData()
             }
     }
 

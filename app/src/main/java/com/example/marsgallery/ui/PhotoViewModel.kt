@@ -60,7 +60,7 @@ class PhotoViewModel @Inject constructor(
         }
     }
 
-    fun loadMore() {
+    fun loadMoreData() {
         // Prevent duplicate loads
         val s = _uiState.value
         if (s.isRefreshing || s.isLoadingMore) return

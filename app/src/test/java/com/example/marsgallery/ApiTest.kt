@@ -8,6 +8,7 @@ import org.junit.Test
 
 import org.junit.Assert.*
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -18,6 +19,7 @@ class ApiTest {
     private val api: NasaApi by lazy {
         Retrofit.Builder()
             .baseUrl("https://api.nasa.gov/")
+            .addConverterFactory(GsonConverterFactory.create())
             .client(OkHttpClient.Builder().build())
             .build()
             .create(NasaApi::class.java)
