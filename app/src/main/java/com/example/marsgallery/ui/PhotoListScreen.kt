@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,9 +20,10 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotoListScreen(viewModel: PhotoViewModel) {
-    val lUiState by viewModel.uiState.collectAsState()
+fun PhotoListScreen(viewModel: PhotoViewModel,
+                    onPhotoClick: (Int) -> Unit) {
 
+    val lUiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
 
     // Infinite scroll trigger if you are near the end
@@ -36,11 +38,7 @@ fun PhotoListScreen(viewModel: PhotoViewModel) {
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("${lUiState.selectedRover.label} Photos") }
-            )
-        },
+        topBar = { TopAppBar(title = { Text("${lUiState.selectedRover.label} Photos") }) },
         bottomBar = {
             NavigationBar {
                 RoverTab.entries.forEach { tab ->
@@ -73,8 +71,9 @@ fun PhotoListScreen(viewModel: PhotoViewModel) {
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    itemsIndexed(lUiState.photos, key = { _, item -> item }) { index, photo ->
-                        PhotoCard(photo)
+                    itemsIndexed(lUiState.photos, key = { _, item -> item })
+                    { index, photo ->
+                        PhotoCard(photo, onClick = { onPhotoClick(index) })
                         if (index == lUiState.photos.lastIndex) Spacer(Modifier.height(7.dp))
                     }
 

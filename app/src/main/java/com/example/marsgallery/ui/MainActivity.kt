@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.marsgallery.MarsNavHost
 import com.example.marsgallery.ui.theme.MarsGalleryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
             MarsGalleryTheme {
                 Surface(Modifier.fillMaxSize()) {
                     val vm: PhotoViewModel = hiltViewModel()
-                    PhotoListScreen(vm)
+                    MarsNavHost(vm)
                 }
             }
         }

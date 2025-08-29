@@ -17,9 +17,10 @@ import coil.compose.AsyncImage
 import com.example.marsgallery.data.MarsPhoto
 
 @Composable
-fun PhotoCard(photo: MarsPhoto) {
+fun PhotoCard(photo: MarsPhoto,  onClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        onClick = { onClick() },
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
         Column(Modifier.padding(12.dp)) {
